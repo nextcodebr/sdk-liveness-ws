@@ -7,8 +7,26 @@
 </head>
 <body>
   <button id="start">Start</button>
-  <script src="liveness-sdk.js"></script>
   <script>
+  // Load the SDK dynamically and ensure it's properly loaded
+  function loadLivenessSDK() {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'liveness-sdk.js';
+      script.onload = () => {
+        // Give the script time to execute and expose Liveness
+        setTimeout(() => {
+          if (typeof Liveness !== 'undefined') {
+            resolve();
+          } else {
+            reject(new Error('Liveness SDK loaded but Liveness function not available'));
+          }
+        }, 100);
+      };
+      script.onerror = () => reject(new Error('Failed to load Liveness SDK'));
+      document.head.appendChild(script);
+    });
+  }
 
   async function getJWT(apiKey) {
     const requestOptions = {
@@ -23,39 +41,45 @@
     const token = await response.json();
     return token.accessToken;
   }
+  
   window.onload = async () => {
-    const apiKey = "667b29a59f86cc4d47dd71f2:6-0ppPvGRdScKw5w3Xho9W7x";
-    const jwt = await getJWT(apiKey);
-    window.liveness = livenessInstance = Liveness({
-      layout: {
-        colors: {
-          primary: "#000000",
-          secondary: "#aaaaaa",
-          background: "#ffffff",
-          text: "#000000",
+    try {
+      await loadLivenessSDK();
+      const apiKey = "<api-key>";
+      const jwt = await getJWT(apiKey);
+      window.liveness = livenessInstance = Liveness({
+        layout: {
+          colors: {
+            primary: "#000000",
+            secondary: "#aaaaaa",
+            background: "#ffffff",
+            text: "#000000",
+          },
         },
-      },
-      // container: canvasContainer.value,
-      // wsUrl: "wss://liveness-socket-dev.nxcd.app",
-      wsUrl: "ws://127.0.0.1:5001",
-      // width: 720,
-      // height: 540,
-      successCallback: (e) => {
-        console.log("Sucesso na análise da foto", e);
-        setTimeout(() => {
-          livenessInstance.unmountLiveness();
-        }, 3000);
-      },
-      errorCallback: (e) => {
-        console.log("Erro na análise da foto", e);
-        setTimeout(() => {
-          livenessInstance.unmountLiveness();
-        }, 3000);
-      },
-    });
-    livenessInstance.setToken(jwt);
-    await livenessInstance.warmUp()
-    livenessInstance.start()
+        // container: canvasContainer.value,
+        // wsUrl: "wss://liveness-socket-dev.nxcd.app",
+        wsUrl: "ws://127.0.0.1:5001",
+        // width: 720,
+        // height: 540,
+        successCallback: (e) => {
+          console.log("Sucesso na análise da foto", e);
+          setTimeout(() => {
+            livenessInstance.unmountLiveness();
+          }, 3000);
+        },
+        errorCallback: (e) => {
+          console.log("Erro na análise da foto", e);
+          setTimeout(() => {
+            livenessInstance.unmountLiveness();
+          }, 3000);
+        },
+      });
+      livenessInstance.setToken(jwt);
+      await livenessInstance.warmUp();
+      livenessInstance.start();
+    } catch (error) {
+      console.error("Error initializing Liveness SDK:", error);
+    }
   };
   </script>
 </body>
