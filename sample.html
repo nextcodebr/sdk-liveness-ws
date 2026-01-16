@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample SDK Liveness</title>
+</head>
+<body>
+  <button id="start">Start</button>
+  <script src="liveness-sdk.js"></script>
+  <script>
+
+  async function getJWT(apiKey) {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `ApiKey ${apiKey}`,
+      },
+    };
+    const endpoint = "https://api.nxcd.app/auth-jwt";
+    const response = await fetch(endpoint, requestOptions);
+    const token = await response.json();
+    return token.accessToken;
+  }
+  window.onload = async () => {
+    const apiKey = "667b29a59f86cc4d47dd71f2:6-0ppPvGRdScKw5w3Xho9W7x";
+    const jwt = await getJWT(apiKey);
+    window.liveness = livenessInstance = Liveness({
+      layout: {
+        colors: {
+          primary: "#000000",
+          secondary: "#aaaaaa",
+          background: "#ffffff",
+          text: "#000000",
+        },
+      },
+      // container: canvasContainer.value,
+      // wsUrl: "wss://liveness-socket-dev.nxcd.app",
+      wsUrl: "ws://127.0.0.1:5001",
+      // width: 720,
+      // height: 540,
+      successCallback: (e) => {
+        console.log("Sucesso na análise da foto", e);
+        setTimeout(() => {
+          livenessInstance.unmountLiveness();
+        }, 3000);
+      },
+      errorCallback: (e) => {
+        console.log("Erro na análise da foto", e);
+        setTimeout(() => {
+          livenessInstance.unmountLiveness();
+        }, 3000);
+      },
+    });
+    livenessInstance.setToken(jwt);
+    await livenessInstance.warmUp()
+    livenessInstance.start()
+  };
+  </script>
+</body>
+</html>
