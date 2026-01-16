@@ -8,13 +8,11 @@
 <body>
   <button id="start">Start</button>
   <script>
-  // Load the SDK dynamically and ensure it's properly loaded
   function loadLivenessSDK() {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'liveness-sdk.js';
       script.onload = () => {
-        // Give the script time to execute and expose Liveness
         setTimeout(() => {
           if (typeof Liveness !== 'undefined') {
             resolve();
