@@ -26,7 +26,6 @@ This guide explains how to use the Liveness SDK and browser compatibility.
       const liveness = new Liveness({
         container: document.getElementById("liveness-container"),
         wsUrl: "ws://localhost:8000",
-        livenessUrl: "http://localhost:8000",
         width: 640,
         height: 480,
         successCallback: (result) => {
@@ -65,7 +64,6 @@ The Liveness constructor accepts the following options:
 {
     container: HTMLElement,        // Container element for the liveness UI
     wsUrl: string,                // WebSocket server URL
-    livenessUrl: string,          // Liveness API URL
     width: number,                // Canvas width (optional)
     height: number,               // Canvas height (optional)
     successCallback: function,    // Called when liveness detection succeeds
