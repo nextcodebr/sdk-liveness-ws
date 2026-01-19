@@ -2,6 +2,9 @@
 
 This guide explains how to use the Liveness SDK and browser compatibility.
 
+## Release Notes
+-
+
 ## Usage in HTML
 
 ### Method 1: Script Tag (Recommended)
@@ -110,25 +113,3 @@ This error typically occurs when:
 - Verify the WebSocket URL is correct
 - Ensure the WebSocket server is running
 - Check for CORS issues if connecting to a different domain
-
-## Example Files
-
-- `example.html` - Complete working example
-- `webpack.config.js` - Webpack configuration with obfuscation
-- `package.json` - Dependencies and build scripts
-
-## Build Output
-
-The webpack build creates a UMD (Universal Module Definition) bundle that works in:
-
-- Browser global scope (via script tag)
-- CommonJS (Node.js)
-- AMD (RequireJS)
-- ES6 modules
-
-The bundle is optimized with:
-
-- Code minification
-- Variable obfuscation (preserving Liveness and ILivenessComponent)
-- Dead code elimination
-- Babel transpilation for browser compatibility
