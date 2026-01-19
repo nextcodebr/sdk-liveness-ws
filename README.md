@@ -1,9 +1,38 @@
 # Liveness SDK - Webpack Build Guide
 
-This guide explains how to use the Liveness SDK and browser compatibility.
+This guide explains how to build and use the Liveness SDK with webpack, including obfuscation and browser compatibility.
 
-## Release Notes
--
+## Prerequisites
+
+Make sure you have Node.js and npm installed on your system.
+
+## Installation
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+## Building the SDK
+
+### Development Build
+
+```bash
+npm run build:sdk
+```
+
+### Production Build (with obfuscation)
+
+The webpack configuration is already set to production mode with Terser minification and obfuscation.
+
+```bash
+npm run build:sdk
+```
+
+This will create:
+
+- `dist/liveness-sdk.min.js` - Minified and obfuscated bundle
 
 ## Usage in HTML
 
@@ -26,6 +55,7 @@ This guide explains how to use the Liveness SDK and browser compatibility.
       const liveness = new Liveness({
         container: document.getElementById("liveness-container"),
         wsUrl: "ws://localhost:8000",
+        livenessUrl: "http://localhost:8000",
         width: 640,
         height: 480,
         successCallback: (result) => {
@@ -64,6 +94,7 @@ The Liveness constructor accepts the following options:
 {
     container: HTMLElement,        // Container element for the liveness UI
     wsUrl: string,                // WebSocket server URL
+    livenessUrl: string,          // Liveness API URL
     width: number,                // Canvas width (optional)
     height: number,               // Canvas height (optional)
     successCallback: function,    // Called when liveness detection succeeds
@@ -111,3 +142,25 @@ This error typically occurs when:
 - Verify the WebSocket URL is correct
 - Ensure the WebSocket server is running
 - Check for CORS issues if connecting to a different domain
+
+## Example Files
+
+- `example.html` - Complete working example
+- `webpack.config.js` - Webpack configuration with obfuscation
+- `package.json` - Dependencies and build scripts
+
+## Build Output
+
+The webpack build creates a UMD (Universal Module Definition) bundle that works in:
+
+- Browser global scope (via script tag)
+- CommonJS (Node.js)
+- AMD (RequireJS)
+- ES6 modules
+
+The bundle is optimized with:
+
+- Code minification
+- Variable obfuscation (preserving Liveness and ILivenessComponent)
+- Dead code elimination
+- Babel transpilation for browser compatibility
