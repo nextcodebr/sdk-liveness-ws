@@ -1,38 +1,6 @@
 # Liveness SDK - Webpack Build Guide
 
-This guide explains how to build and use the Liveness SDK with webpack, including obfuscation and browser compatibility.
-
-## Prerequisites
-
-Make sure you have Node.js and npm installed on your system.
-
-## Installation
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-## Building the SDK
-
-### Development Build
-
-```bash
-npm run build:sdk
-```
-
-### Production Build (with obfuscation)
-
-The webpack configuration is already set to production mode with Terser minification and obfuscation.
-
-```bash
-npm run build:sdk
-```
-
-This will create:
-
-- `dist/liveness-sdk.min.js` - Minified and obfuscated bundle
+This guide explains how to use the Liveness SDK and browser compatibility.
 
 ## Usage in HTML
 
