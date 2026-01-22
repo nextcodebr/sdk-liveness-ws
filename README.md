@@ -20,7 +20,7 @@ This guide explains how to use the Liveness SDK and browser compatibility.
     <div id="liveness-container"></div>
 
     <!-- Include the bundled SDK -->
-    <script src="./versions/<version>/liveness-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/nextcodebr/sdk-liveness-ws/versions/v0.1.3/liveness-sdk.min.js"></script>
 
     <script>
       // Liveness is now available as a global constructor
@@ -50,7 +50,7 @@ This guide explains how to use the Liveness SDK and browser compatibility.
 ### Method 2: ES6 Module Import (if using a module bundler)
 
 ```javascript
-import Liveness from "./versions/<version>/liveness-sdk.min.js";
+import Liveness from "https://cdn.jsdelivr.net/gh/nextcodebr/sdk-liveness-ws/versions/v0.1.3/liveness-sdk.min.js";
 
 const liveness = new Liveness({
   // configuration options
@@ -96,7 +96,7 @@ The Liveness constructor accepts the following options:
 
 This error typically occurs when:
 
-1. **Incorrect import**: Use `<script src="./versions/<version>/liveness-sdk.min.js"></script>` for browser usage
+1. **Incorrect import**: Use `<script src="https://cdn.jsdelivr.net/gh/nextcodebr/sdk-liveness-ws/versions/<version>/liveness-sdk.min.js"></script>` for browser usage
 
 ### Camera Access Issues
 

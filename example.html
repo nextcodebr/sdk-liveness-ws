@@ -99,7 +99,7 @@
           <input
             type="text"
             id="ws-url"
-            value="ws://localhost:8000"
+            value="ws://127.0.0.1:5001"
             style="width: 200px"
           />
         </p> 
@@ -108,14 +108,14 @@
           <input
             type="text"
             id="token"
-            value="your-token-here"
+            value="667b29a59f86cc4d47dd71f2:6-0ppPvGRdScKw5w3Xho9W7x"
             style="width: 300px"
           />
         </p>
       </div>
     </div>
 
-    <script src="./dist/liveness-sdk.min.js"></script>
+    <script src="dist/liveness-sdk.min.js"></script>
 
     <script>
       let livenessInstance = null;
@@ -128,6 +128,20 @@
       const wsUrlInput = document.getElementById("ws-url");
       const tokenInput = document.getElementById("token");
 
+      async function getJWT(apiKey) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `ApiKey ${apiKey}`,
+          },
+        };
+        const endpoint = "https://api.nxcd.app/auth-jwt";
+        const response = await fetch(endpoint, requestOptions);
+        const token = await response.json();
+        return token.accessToken;
+      }
+
       function updateStatus(message, type = "info") {
         statusDiv.textContent = message;
         statusDiv.className = `status ${type}`;
@@ -139,14 +153,15 @@
         stopBtn.disabled = true;
         restartBtn.disabled = true;
         startBtn.disabled = false;
+        window.location.replace("liveness-true.html");
       }
 
       function onError(error) {
-        console.error("Liveness detection error:", error);
         updateStatus(`Error: ${error.message || error}`, "error");
         stopBtn.disabled = true;
         restartBtn.disabled = true;
         startBtn.disabled = false;
+        window.location.replace("liveness-false.html");
       }
 
       async function startLiveness() {
@@ -170,7 +185,9 @@
             },
           });
 
-          livenessInstance.setToken(tokenInput.value);
+          const token = await getJWT(tokenInput.value);
+
+          livenessInstance.setToken(token);
 
           await livenessInstance.warmUp();
           livenessInstance.start();
