@@ -1,0 +1,14 @@
+{
+  "version": "v0.1.7",
+  "buildDate": "2026-01-29T15:29:28Z",
+  "files": [
+    "liveness-sdk.min.js"
+  ],
+  "rootFiles": [
+    "example.html",
+    "liveness-true.html",
+    "liveness-false.html",
+    "README.md"
+  ],
+  "previousVersion": "v0.1.6"
+}
