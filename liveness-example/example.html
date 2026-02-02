@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liveness SDK Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      #sdk-container {
+        width: 640px;
+        height: 480px;
+        margin: 20px auto;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        position: relative;
+        background: #000;
+      }
+      .controls {
+        text-align: center;
+        margin: 20px 0;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .status {
+        text-align: center;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .status.info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Liveness SDK Example</h1>
+      <p>
+        This example demonstrates how to use the bundled Liveness SDK in a web
+        page.
+      </p>
+
+      <div id="status" class="status info">
+        Ready to start liveness detection
+      </div>
+
+      <div id="sdk-container"></div>
+
+      <div class="controls">
+        <button id="start-btn">Start Liveness</button>
+        <button id="stop-btn" disabled>Stop Liveness</button>
+        <button id="restart-btn" disabled>Restart</button>
+      </div>
+
+      <div class="config">
+        <h3>Configuration</h3>
+        <p>
+          <strong>WebSocket URL:</strong>
+          <input
+            type="text"
+            id="ws-url"
+            value="ws://127.0.0.1:5001"
+            style="width: 200px"
+          />
+        </p> 
+        <p>
+          <strong>ApiKey:</strong>
+          <input
+            type="text"
+            id="token"
+            value=""
+            style="width: 300px"
+          />
+        </p>
+      </div>
+    </div>
+
+    <script src="../dist/detection-sdk.min.js"></script>
+
+    <script>
+      let sdk = null;
+
+      const startBtn = document.getElementById("start-btn");
+      const stopBtn = document.getElementById("stop-btn");
+      const restartBtn = document.getElementById("restart-btn");
+      const statusDiv = document.getElementById("status");
+      const container = document.getElementById("sdk-container");
+      const wsUrlInput = document.getElementById("ws-url");
+      const tokenInput = document.getElementById("token");
+
+      async function getJWT(apiKey) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `ApiKey ${apiKey}`,
+          },
+        };
+        const endpoint = "https://api.nxcd.app/auth-jwt";
+        const response = await fetch(endpoint, requestOptions);
+        const token = await response.json();
+        return token.accessToken;
+      }
+
+      function updateStatus(message, type = "info") {
+        statusDiv.textContent = message;
+        statusDiv.className = `status ${type}`;
+      }
+
+      function onResponse(result) {
+        const { success, message } = result
+        console.log("Liveness detection response:", result);
+        stopBtn.disabled = true;
+        restartBtn.disabled = true;
+        startBtn.disabled = false;
+        if (success) {
+          window.location.replace("liveness-true.html");
+        } else {
+          window.location.replace("liveness-false.html");
+        }
+      } 
+
+      async function startLiveness() {
+        try {
+          updateStatus("Initializing liveness detection...", "info");
+
+          sdk = new DetectionSDK({
+            container: container,
+            wsUrl: wsUrlInput.value,
+            width: 640,
+            height: 480,
+            onResponseCallback: onResponse,
+            layout: {
+              colors: {
+                primary: "#007bff",
+                secondary: "#6c757d",
+                background: "#ffffff",
+                text: "#000000",
+              },
+            },
+          });
+
+          const token = await getJWT(tokenInput.value);
+
+          sdk.setToken(token);
+
+          await sdk.warmUp();
+          sdk.start();
+
+          updateStatus(
+            "Liveness detection started. Please look at the camera.",
+            "info",
+          );
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          restartBtn.disabled = false;
+        } catch (error) {
+          console.error("Failed to start liveness:", error);
+          updateStatus(`Failed to start: ${error.message}`, "error");
+        }
+      }
+
+      function stopLiveness() {
+        if (sdk) {
+          sdk.unmountDetectionSDK();
+          sdk = null;
+          updateStatus("Liveness detection stopped.", "info");
+          startBtn.disabled = false;
+          stopBtn.disabled = true;
+          restartBtn.disabled = true;
+        }
+      }
+
+      function restartLiveness() {
+        if (sdk) {
+          sdk.restart();
+          updateStatus("Liveness detection restarted.", "info");
+        }
+      }
+
+      startBtn.addEventListener("click", startLiveness);
+      stopBtn.addEventListener("click", stopLiveness);
+      restartBtn.addEventListener("click", restartLiveness);
+
+      if (typeof DetectionSDK === "undefined") {
+        updateStatus(
+          "Error: Detection SDK not loaded. Make sure detection-sdk.min.js is available.",
+          "error",
+        );
+        startBtn.disabled = true;
+      } else {
+        console.log("Detection SDK loaded successfully");
+        updateStatus(
+          "Detection SDK loaded. Configure settings and click Start.",
+          "success",
+        );
+      }
+    </script>
+  </body>
+</html>

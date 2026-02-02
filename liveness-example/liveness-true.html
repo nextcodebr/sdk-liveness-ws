@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liveness SDK Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      #sdk-container {
+        width: 640px;
+        height: 480px;
+        margin: 20px auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: green;
+      } 
+      .controls {
+        text-align: center;
+        margin: 20px 0;
+      }
+      a {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+      }
+      a:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Liveness SDK Example</h1>
+      <p>
+        This example demonstrates how to use the bundled Liveness SDK in a web
+        page.
+      </p>
+      <div id="sdk-container">
+        <strong>Success</strong>
+        <p>Liveness validation completed successfully</p>
+      </div> 
+
+      <div class="controls">
+        <a id="start-btn" href="example.html">Try Again</a>
+      </div>
+    </div> 
+  </body>
+</html>
