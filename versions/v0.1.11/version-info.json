@@ -1,0 +1,23 @@
+{
+  "version": "v0.1.11",
+  "buildDate": "2026-02-03T19:18:37Z",
+  "files": [
+    "detection-sdk.min.js"
+  ],
+  "releaseNotes": [
+    {
+      "version": "v0.1.11",
+      "date": "2026-02-03T19:18:37Z",
+      "notes": [
+        "fix README.md"
+      ]
+    }
+  ],
+  "rootFiles": [
+    "/liveness/example.html",
+    "/liveness/liveness-true.html",
+    "/liveness/liveness-false.html",
+    "/README.md"
+  ],
+  "previousVersion": "v0.1.10"
+}

@@ -1,11 +1,11 @@
-# Detection SDK - Webpack Build Guide
+# Detection SDK
 
 This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
-### v0.1.10 (2026-02-03)
-- testing release notes
+### v0.1.11 (2026-02-03)
+- fix README.md
 
 ### v0.1.10 (2026-02-03)
 - testing release notes
@@ -30,7 +30,7 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
     <div id="sdk-container"></div>
 
     <!-- Include the bundled SDK -->
-    <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/<version>/detection-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/*version*/detection-sdk.min.js"></script>
 
     <script>
       // Detection is now available as a global constructor
@@ -58,7 +58,7 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
 ### Method 2: ES6 Module Import (if using a module bundler)
 
 ```javascript
-import DetectionSDK from "https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/<version>/detection-sdk.min.js";
+import DetectionSDK from "https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/*version*/detection-sdk.min.js";
 
 const detection = new DetectionSDK({
   // configuration options
@@ -105,7 +105,7 @@ The DetectionSDK constructor accepts the following options:
 
 This error typically occurs when:
 
-- **Incorrect import**: Use <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/<version>/detection-sdk.min.js"></script> for browser usage
+- **Incorrect import**: Use <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/*version*/detection-sdk.min.js"></script> for browser usage
 
 ### Camera Access Issues
 
