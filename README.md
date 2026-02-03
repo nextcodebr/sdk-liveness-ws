@@ -4,8 +4,11 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
-### v0.1.9 (2026-02-03)
-- add new build method
+### v0.1.10 (2026-02-03)
+- testing release notes
+
+### v0.1.10 (2026-02-03)
+- testing release notes
 
 ### v0.1.9 (2026-02-03)
 - add new build method
