@@ -4,6 +4,10 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.12 (2026-02-03)
+- fix README.md
+-  fix sdk build
+
 ### v0.1.11 (2026-02-03)
 - fix README.md
 
