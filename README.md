@@ -4,7 +4,12 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
--
+### v0.1.9 (2026-02-03)
+- add new build method
+
+### v0.1.9 (2026-02-03)
+- add new build method
+
 
 ## Usage in HTML
 
@@ -22,7 +27,7 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
     <div id="sdk-container"></div>
 
     <!-- Include the bundled SDK -->
-    <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/v0.1.3/detection-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/<version>/detection-sdk.min.js"></script>
 
     <script>
       // Detection is now available as a global constructor
@@ -50,7 +55,7 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
 ### Method 2: ES6 Module Import (if using a module bundler)
 
 ```javascript
-import DetectionSDK from "https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/v0.1.3/detection-sdk.min.js";
+import DetectionSDK from "https://cdn.jsdelivr.net/gh/nextcodebr/detection-sdk-ws/versions/<version>/detection-sdk.min.js";
 
 const detection = new DetectionSDK({
   // configuration options
