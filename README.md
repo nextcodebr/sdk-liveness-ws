@@ -4,6 +4,9 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.13 (2026-02-13)
+- performance improvement
+
 ### v0.1.12 (2026-02-03)
 - fix README.md
 -  fix sdk build
@@ -100,7 +103,6 @@ The DetectionSDK constructor accepts the following options:
 - `pause()` - Pause detection
 - `resume()` - Resume detection
 - `restart()` - Restart detection
-- `setFunctionName(functionName: string)` - Set the function name for the detection (Liveness | Document). Default is Liveness.
 - `unmountDetectionSDK()` - Clean up and destroy instance
 
 ## Troubleshooting
