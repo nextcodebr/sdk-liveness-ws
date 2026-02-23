@@ -4,6 +4,9 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.15 (2026-02-23)
+- SDK and Detection statuses
+
 ### v0.1.14 (2026-02-19)
 - Response status success|failed|waiting
 
@@ -26,7 +29,7 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Usage in HTML
 
-You can use the `detection-sdk.min.js` as Document or Liveness detection, depending on the `functionName` parameter.
+You can use the `detection-sdk.min.js` as Document or Liveness detection, depending on the `style` parameter.
 
 ### Method 1: Script Tag (Recommended)
 
@@ -46,12 +49,17 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
       // Detection is now available as a global constructor
       const detection = new DetectionSDK({
         container: document.getElementById("sdk-container"),
-        functionName: "Liveness", // Function name for the detection (Liveness | Document). Default is Liveness.
+        style: "normal", // Liveness style (normal | c6 | facetech | document)
         wsUrl: "wss://detection-sdk-ws.nxcd.app:8000",
         width: 640,
         height: 480,
-        onResponseCallback: (result) => {
-          console.log("Response:", result);
+        onDetectionResponse: (result) => {
+          // result: { status: "DETECTION_SUCCESS" | "DETECTION_FAILED", photo: string, message: string }
+          console.log("Detection result:", result);
+        },
+        onSDKStateChange: (state) => {
+          // state: { status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "DETECTION_STARTED", message?: string }
+          console.log("SDK state:", state);
         },
       });
 
@@ -81,13 +89,15 @@ The DetectionSDK constructor accepts the following options:
 
 ```javascript
 {
-    container: HTMLElement,       // Container element for the Detection UI. (optional) If not provided, the SDK will use body element.
-    wsUrl: string,                // WebSocket server URL
-    width: number,                // Canvas width (optional)
-    height: number,               // Canvas height (optional)
-    onResponseCallback: function, // Called when detection finishes. Receive an object with the detection result.
-    functionName: string,         // Function name for the detection (Liveness | Document). Default is Liveness.
-    layout: {                     // UI customization (optional)
+    container: HTMLElement,             // Container element for the Detection UI. (optional) Defaults to document.body.
+    wsUrl: string,                      // WebSocket server URL
+    width: number,                      // Canvas width (optional)
+    height: number,                     // Canvas height (optional)
+    style: string,                      // Liveness style: "normal" | "c6" | "facetech" | "document"
+    onDetectionResponse: function,      // Called when detection finishes (success or failure).
+    onSDKStateChange: function,         // Called on SDK lifecycle state changes.
+    backButtonFunctionCallback: function, // Called when back button is pressed. (optional)
+    layout: {                           // UI customization (optional)
         colors: {
             primary: string,
             secondary: string,
@@ -95,6 +105,44 @@ The DetectionSDK constructor accepts the following options:
             text: string
         }
     },
+}
+```
+
+## Enums
+
+### `DetectionSDK.DetectionStatus`
+
+| Key | Value | Description |
+|---|---|---|
+| `SUCCESS` | `"DETECTION_SUCCESS"` | Detection completed successfully |
+| `FAILED` | `"DETECTION_FAILED"` | Detection completed but validation failed |
+
+### `DetectionSDK.SDKState`
+
+| Key | Value | Description |
+|---|---|---|
+| `INITIALIZED` | `"SDK_INITIALIZED"` | SDK warmUp completed |
+| `CAMERA_READY` | `"SDK_CAMERA_READY"` | Camera permission granted and active |
+| `WAITING` | `"SDK_WAITING"` | Photo is being processed |
+| `ERROR` | `"SDK_ERROR"` | SDK error (camera denied, WebSocket failed) |
+| `DETECTION_STARTED` | `"DETECTION_STARTED"` | Detection started analyzing frames |
+
+### Callback Contracts
+
+**`onDetectionResponse(result)`**
+```javascript
+{
+  status: "DETECTION_SUCCESS" | "DETECTION_FAILED",
+  photo: string,    // base64 jpeg
+  message: string,  // descriptive message
+}
+```
+
+**`onSDKStateChange(state)`**
+```javascript
+{
+  status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "DETECTION_STARTED",
+  message: string | undefined,  // present for SDK_ERROR and SDK_WAITING
 }
 ```
 

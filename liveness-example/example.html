@@ -163,16 +163,34 @@
       statusDiv.className = `status ${type}`;
     }
 
-    function onResponse(result) {
-      const { success, message } = result
+    function onDetectionResponse(result) {
       console.log("Liveness detection response:", result);
       stopBtn.disabled = true;
       restartBtn.disabled = true;
       startBtn.disabled = false;
-      if (success) {
+      if (result.status === DetectionSDK.DetectionStatus.SUCCESS) {
         window.location.replace("liveness-true.html");
       } else {
         window.location.replace("liveness-false.html");
+      }
+    }
+
+    function onSDKStateChange(state) {
+      console.log("SDK state change:", state);
+      if (state.status === DetectionSDK.SDKState.ERROR) {
+        updateStatus(state.message, "error");
+      }
+      if (state.status === DetectionSDK.SDKState.INITIALIZED) {
+        updateStatus("SDK initialized.", "info");
+      }
+      if (state.status === DetectionSDK.SDKState.CAMERA_READY) {
+        updateStatus("Camera ready.", "info");
+      }
+      if (state.status === DetectionSDK.SDKState.DETECTION_STARTED) {
+        updateStatus("Detection started. Please look at the camera.", "info");
+      }
+      if (state.status === DetectionSDK.SDKState.WAITING) {
+        updateStatus("Processing photo...", "info");
       }
     }
 
@@ -205,7 +223,8 @@
           width: 640,
           height: 480,
           style: styleInput.value,
-          onResponseCallback: onResponse,
+          onDetectionResponse: onDetectionResponse,
+          onSDKStateChange: onSDKStateChange,
           backButtonFunctionCallback: onBack,
           layout: {
             colors: {
