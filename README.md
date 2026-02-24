@@ -4,6 +4,10 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.16 (2026-02-24)
+- New statuses SDK_DETECTION_STARTED
+-  DETECTION_WAITING
+
 ### v0.1.15 (2026-02-23)
 - SDK and Detection statuses
 
@@ -54,11 +58,11 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
         width: 640,
         height: 480,
         onDetectionResponse: (result) => {
-          // result: { status: "DETECTION_SUCCESS" | "DETECTION_FAILED", photo: string, message: string }
+          // result: { status: "DETECTION_SUCCESS" | "DETECTION_FAILED" | "DETECTION_WAITING", photo: string, message: string }
           console.log("Detection result:", result);
         },
         onSDKStateChange: (state) => {
-          // state: { status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "DETECTION_STARTED", message?: string }
+          // state: { status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "SDK_DETECTION_STARTED", message?: string }
           console.log("SDK state:", state);
         },
       });
@@ -116,6 +120,7 @@ The DetectionSDK constructor accepts the following options:
 |---|---|---|
 | `SUCCESS` | `"DETECTION_SUCCESS"` | Detection completed successfully |
 | `FAILED` | `"DETECTION_FAILED"` | Detection completed but validation failed |
+| `WAITING` | `"DETECTION_WAITING"` | Photo is being processed |
 
 ### `DetectionSDK.SDKState`
 
@@ -125,7 +130,7 @@ The DetectionSDK constructor accepts the following options:
 | `CAMERA_READY` | `"SDK_CAMERA_READY"` | Camera permission granted and active |
 | `WAITING` | `"SDK_WAITING"` | Photo is being processed |
 | `ERROR` | `"SDK_ERROR"` | SDK error (camera denied, WebSocket failed) |
-| `DETECTION_STARTED` | `"DETECTION_STARTED"` | Detection started analyzing frames |
+| `DETECTION_STARTED` | `"SDK_DETECTION_STARTED"` | Detection started analyzing frames |
 
 ### Callback Contracts
 
@@ -141,7 +146,7 @@ The DetectionSDK constructor accepts the following options:
 **`onSDKStateChange(state)`**
 ```javascript
 {
-  status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "DETECTION_STARTED",
+  status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "SDK_DETECTION_STARTED",
   message: string | undefined,  // present for SDK_ERROR and SDK_WAITING
 }
 ```
