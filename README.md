@@ -4,6 +4,9 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.18 (2026-02-24)
+- Camera handling improvements
+
 ### v0.1.17 (2026-02-24)
 - Granularity in SDK statuses for frontend dealings
 
