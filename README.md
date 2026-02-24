@@ -4,6 +4,9 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.17 (2026-02-24)
+- Granularity in SDK statuses for frontend dealings
+
 ### v0.1.16 (2026-02-24)
 - New statuses SDK_DETECTION_STARTED
 -  DETECTION_WAITING
@@ -62,7 +65,7 @@ You can use the `detection-sdk.min.js` as Document or Liveness detection, depend
           console.log("Detection result:", result);
         },
         onSDKStateChange: (state) => {
-          // state: { status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "SDK_DETECTION_STARTED", message?: string }
+          // state: { status: string (one of DetectionSDK.SDKState values), message?: string }
           console.log("SDK state:", state);
         },
       });
@@ -128,16 +131,22 @@ The DetectionSDK constructor accepts the following options:
 |---|---|---|
 | `INITIALIZED` | `"SDK_INITIALIZED"` | SDK warmUp completed |
 | `CAMERA_READY` | `"SDK_CAMERA_READY"` | Camera permission granted and active |
-| `WAITING` | `"SDK_WAITING"` | Photo is being processed |
-| `ERROR` | `"SDK_ERROR"` | SDK error (camera denied, WebSocket failed) |
 | `DETECTION_STARTED` | `"SDK_DETECTION_STARTED"` | Detection started analyzing frames |
+| `ERROR_CAMERA_PERMISSION_DENIED` | `"SDK_ERROR_CAMERA_PERMISSION_DENIED"` | User denied camera permission |
+| `ERROR_CAMERA_NOT_FOUND` | `"SDK_ERROR_CAMERA_NOT_FOUND"` | No camera device available |
+| `ERROR_CAMERA_IN_USE` | `"SDK_ERROR_CAMERA_IN_USE"` | Camera is in use by another application |
+| `ERROR_NETWORK_OFFLINE` | `"SDK_ERROR_NETWORK_OFFLINE"` | Browser went offline |
+| `ERROR_CONNECTION_FAILED` | `"SDK_ERROR_CONNECTION_FAILED"` | WebSocket reconnection failed after multiple attempts |
+| `ERROR` | `"SDK_ERROR"` | Generic/uncategorized error (fallback) |
+
+> **Tip:** All error states have values starting with `"SDK_ERROR"`. Use `state.status.startsWith("SDK_ERROR")` to check for any error.
 
 ### Callback Contracts
 
 **`onDetectionResponse(result)`**
 ```javascript
 {
-  status: "DETECTION_SUCCESS" | "DETECTION_FAILED",
+  status: "DETECTION_SUCCESS" | "DETECTION_FAILED" | "DETECTION_WAITING",
   photo: string,    // base64 jpeg
   message: string,  // descriptive message
 }
@@ -146,8 +155,8 @@ The DetectionSDK constructor accepts the following options:
 **`onSDKStateChange(state)`**
 ```javascript
 {
-  status: "SDK_INITIALIZED" | "SDK_CAMERA_READY" | "SDK_WAITING" | "SDK_ERROR" | "SDK_DETECTION_STARTED",
-  message: string | undefined,  // present for SDK_ERROR and SDK_WAITING
+  status: string,               // one of DetectionSDK.SDKState values
+  message: string | undefined,  // present for error states
 }
 ```
 

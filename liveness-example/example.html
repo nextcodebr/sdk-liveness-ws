@@ -177,20 +177,36 @@
 
     function onSDKStateChange(state) {
       console.log("SDK state change:", state);
-      if (state.status === DetectionSDK.SDKState.ERROR) {
-        updateStatus(state.message, "error");
-      }
-      if (state.status === DetectionSDK.SDKState.INITIALIZED) {
-        updateStatus("SDK initialized.", "info");
-      }
-      if (state.status === DetectionSDK.SDKState.CAMERA_READY) {
-        updateStatus("Camera ready.", "info");
-      }
-      if (state.status === DetectionSDK.SDKState.DETECTION_STARTED) {
-        updateStatus("Detection started. Please look at the camera.", "info");
-      }
-      if (state.status === DetectionSDK.SDKState.WAITING) {
-        updateStatus("Processing photo...", "info");
+      switch (state.status) {
+        case DetectionSDK.SDKState.INITIALIZED:
+          updateStatus("SDK initialized.", "info");
+          break;
+        case DetectionSDK.SDKState.CAMERA_READY:
+          updateStatus("Camera ready.", "info");
+          break;
+        case DetectionSDK.SDKState.DETECTION_STARTED:
+          updateStatus("Detection started. Please look at the camera.", "info");
+          break;
+        case DetectionSDK.SDKState.ERROR_CAMERA_PERMISSION_DENIED:
+          updateStatus("Camera permission denied. Please allow camera access in browser settings.", "error");
+          break;
+        case DetectionSDK.SDKState.ERROR_CAMERA_NOT_FOUND:
+          updateStatus("No camera found on this device.", "error");
+          break;
+        case DetectionSDK.SDKState.ERROR_CAMERA_IN_USE:
+          updateStatus("Camera is in use by another application.", "error");
+          break;
+        case DetectionSDK.SDKState.ERROR_NETWORK_OFFLINE:
+          updateStatus("No internet connection.", "error");
+          break;
+        case DetectionSDK.SDKState.ERROR_CONNECTION_FAILED:
+          updateStatus("Failed to connect to the server.", "error");
+          break;
+        default:
+          if (state.status.startsWith("SDK_ERROR")) {
+            updateStatus(state.message || "An unexpected error occurred.", "error");
+          }
+          break;
       }
     }
 
