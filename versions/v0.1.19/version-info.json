@@ -1,0 +1,23 @@
+{
+  "version": "v0.1.19",
+  "buildDate": "2026-02-27T17:29:17Z",
+  "files": [
+    "detection-sdk.min.js"
+  ],
+  "releaseNotes": [
+    {
+      "version": "v0.1.19",
+      "date": "2026-02-27T17:29:17Z",
+      "notes": [
+        "Fix Camera for Document and Video for both Liveness and Documents"
+      ]
+    }
+  ],
+  "rootFiles": [
+    "/liveness/example.html",
+    "/liveness/liveness-true.html",
+    "/liveness/liveness-false.html",
+    "/README.md"
+  ],
+  "previousVersion": "v0.1.18"
+}

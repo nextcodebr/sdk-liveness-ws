@@ -4,6 +4,9 @@ This guide explains how to use the Detection SDK and browser compatibility.
 
 ## Release Notes
 
+### v0.1.19 (2026-02-27)
+- Fix Camera for Document and Video for both Liveness and Documents
+
 ### v0.1.18 (2026-02-24)
 - Camera handling improvements
 
